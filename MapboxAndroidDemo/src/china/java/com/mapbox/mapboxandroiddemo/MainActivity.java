@@ -146,19 +146,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     // Item click listener
-    ItemClickSupport.addTo(recyclerView).setOnItemClickListener((recyclerView, position, view) -> {
-      ExampleItemModel model = adapter.getItemAt(position);
+    ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+      @Override
+      public void onItemClicked(RecyclerView recyclerView, int position, View view) {
+        ExampleItemModel model = adapter.getItemAt(position);
 
-      // in case it's an info tile
-      if (model != null) {
-        if (showJavaExamples) {
-          startActivity(model.getJavaActivity());
-        } else {
-          startActivity(model.getKotlinActivity());
+        // in case it's an info tile
+        if (model != null) {
+          if (showJavaExamples) {
+            startActivity(model.getJavaActivity());
+          } else {
+            startActivity(model.getKotlinActivity());
+          }
+
+          analytics.clickedOnIndividualExample(getString(model.getTitle()), loggedIn);
+          analytics.viewedScreen(getString(model.getTitle()), loggedIn);
         }
-
-        analytics.clickedOnIndividualExample(getString(model.getTitle()), loggedIn);
-        analytics.viewedScreen(getString(model.getTitle()), loggedIn);
       }
     });
 
